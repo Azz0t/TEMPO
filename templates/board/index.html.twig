@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mes tableaux Kanban - Tempo{% endblock %}
+
+{% block body %}
+    <h1>Mes tableaux Kanban</h1>
+
+    <section>
+        <h2>Modèles les plus populaires</h2>
+        <p>Aucun modèle disponible pour le moment.</p>
+        <a href="{{ path('app_board_new') }}">Créer un modèle Kanban</a>
+    </section>
+
+    <section>
+        <h2>Récemment consultés</h2>
+
+        {% if boards is empty %}
+            <p>Tu n'as pas encore créé de tableau.</p>
+        {% else %}
+            {% for board in boards %}
+                <article>
+                    <h3>{{ board.name }}</h3>
+                    <p>{{ board.description }}</p>
+                </article>
+            {% endfor %}
+        {% endif %}
+    </section>
+{% endblock %}

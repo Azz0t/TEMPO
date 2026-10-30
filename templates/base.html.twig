@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+        {% block stylesheets %}{% endblock %}
+
+        {% block javascripts %}
+            {{ importmap('app') }}
+        {% endblock %}
+
+        {% set frankenphp_hot_reload = app.request.server.get('FRANKENPHP_HOT_RELOAD') %}
+        {% if frankenphp_hot_reload %}
+        <meta name="frankenphp-hot-reload:url" content="{{ frankenphp_hot_reload }}">
+        <script src="https://cdn.jsdelivr.net/npm/idiomorph"></script>
+        <script src="https://cdn.jsdelivr.net/npm/frankenphp-hot-reload/+esm" type="module"></script>
+        {% endif %}
+    </head> 
+    <body>
+        <header>
+            <nav>
+                <ul>
+                    <li>
+                        <a href="{{ path('app_home') }}">
+                            <img src="{{ asset('images/logo.png') }}" alt="">
+                            <h1><strong>TEMPO</strong></h1>
+                        </a>
+                    </li>
+                    <li>
+                        <!--
+                        <form action="{{ path('app_home') }}" method="get" class="search-form">
+                            <input
+                                type="search"
+                                name="q"
+                                placeholder="Search for a board, a task..."
+                                value="{{ app.request.query.get('q') }}"
+                            >
+                        </form>
+                        -->
+                    </li>
+                    <li>
+                        {% if app.user %}
+                            <a href="{{ path('app_account') }}"><img src="{{ asset('images/account.png') }}" alt=""></a>
+                        {% else %}
+                            <a href="{{ path('app_account') }}"><img src="{{ asset('images/account.png') }}" alt=""></a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+        </header>
+        {% block body %}{% endblock %}
+    </body>
+</html>

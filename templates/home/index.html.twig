@@ -1,0 +1,122 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - Tempo{% endblock %}
+
+{% block body %}
+    <main>
+        <section class="hero">
+            <div class="box-title-hero">
+                <img class="logotype" src="{{ asset('images/logotype.png') }}" alt="Tempo"/>
+                <p class="subtitle">Plan. Follow. Succeed.</p>
+                <p class="hero-description">
+                    Organize your sprints, track progress, and deliver as a team.
+                </p>
+                <a class="btn-getstart" href="{{ path('app_login') }}">
+                    GET START
+                </a>
+            </div>
+
+            <div class="contain-card-hero">
+                <div class="card-hero">
+                    <img
+                        src="{{ asset('icons/icon-it.png') }}"
+                        class="icon-contain-card-hero"
+                        alt=""
+                    >
+                    <p>IT project</p>
+                </div>
+                <div class="card-hero">
+                    <img
+                        src="{{ asset('icons/icon-design.png') }}"
+                        class="icon-contain-card-hero"
+                        alt=""
+                    >
+                    <p>Design project</p>
+                </div>
+                <div class="card-hero">
+                    <img
+                        src="{{ asset('icons/icon-study.png') }}"
+                        class="icon-contain-card-hero"
+                        alt=""
+                    >
+                    <p>study projects</p>
+                </div>
+                <div class="card-hero">
+                    <img
+                        src="{{ asset('icons/icon-marketing.png') }}"
+                        class="icon-contain-card-hero"
+                        alt=""
+                    >
+                    <p>Marketing project</p>
+                </div>
+                <div class="card-hero">
+                    <img
+                        src="{{ asset('icons/icon-personal.png') }}"
+                        class="icon-contain-card-hero"
+                        alt=""
+                    >
+                    <p>personal projects</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="container-models">
+            <div>
+                <h2>Popular models</h2>
+
+                <div class="box-models">
+                    <a href="{{ path('app_board_new') }}" class="card-model">
+                        <div class="card-model-image">
+                            <span class="add-model">+</span>
+                        </div>
+
+                        <div class="card-model-info">
+                            <h3>Create a Kanban template</h3>
+                            <p>Columns: To do · In progress · Done</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h2>Recently viewed</h2>
+
+                <div class="box-models">
+                    {% if app.user %}
+                        {% if boards is empty %}
+                            <div class="card-model">
+                                <div class="card-model-info">
+                                    <h3>Aucun board pour le moment</h3>
+                                    <p>Crée ton premier board pour commencer.</p>
+                                </div>
+                            </div>
+                        {% else %}
+                            {% for board in boards %}
+                                <a href="{{ path('app_board_show', {id: board.id}) }}"
+                                class="card-model">
+
+                                    <div class="card-model-image"></div>
+
+                                    <div class="card-model-info">
+                                        <h3>{{ board.name ?: 'Board sans nom' }}</h3>
+                                        <p>
+                                            {% if board.endDate %}
+                                                Fin du projet : {{ board.endDate|date('d/m/Y') }}
+                                            {% else %}
+                                                Aucune date de fin définie
+                                            {% endif %}
+                                        </p>
+                                    </div>
+
+                                </a>
+                            {% endfor %}
+                        {% endif %}
+                    {% else %}
+                        <p>Connecte-toi pour voir tes boards.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}

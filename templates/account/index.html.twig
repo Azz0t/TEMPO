@@ -1,0 +1,14 @@
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon compte - Tempo{% endblock %}
+
+{% block body %}
+    <h1>Mon compte</h1>
+
+    <p>Prénom : {{ app.user.firstName }}</p>
+    <p>Nom : {{ app.user.lastName }}</p>
+    <p>Adresse e-mail : {{ app.user.email }}</p>
+
+    <a href="{{ logout_path() }}">Se déconnecter</a>
+{% endblock %}

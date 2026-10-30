@@ -1,0 +1,432 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ board.name ?: 'Board sans nom' }} - Tempo{% endblock %}
+
+{% block body %}
+    <main class="board-page">
+
+        <header class="board-toolbar">
+            <input
+                type="text"
+                id="board-title"
+                class="board-title-input"
+                value="{{ board.name }}"
+                data-url="{{ path('app_board_rename', {id: board.id}) }}"
+                data-token="{{ csrf_token('rename-board-' ~ board.id) }}"
+                aria-label="Nom du board"
+                readonly
+            >
+
+            <div class="board-toolbar-actions">
+
+                <a href="#members"
+                   class="board-members"
+                   aria-label="Membres du board">
+                    <img
+                        src="{{ asset('icons/users.png') }}"
+                        alt=""
+                    >
+                </a>
+
+                <button type="button" class="board-share">
+                    <img
+                        src="{{ asset('icons/icon-add-users.png') }}"
+                        alt=""
+                    >
+                    <span>Share</span>
+                </button>
+
+
+                <div class="board-menu-container">
+
+                    <button
+                        type="button"
+                        class="icon-menu"
+                        id="board-menu-toggle"
+                        aria-label="Open board menu"
+                        aria-expanded="false"
+                        aria-controls="board-menu-dropdown"
+                    >
+                        <img
+                            src="{{ asset('icons/icon-menu.png') }}"
+                            alt=""
+                        >
+                    </button>
+
+                    <div class="board-menu-dropdown" id="board-menu-dropdown" hidden>
+
+                        <button
+                            type="button"
+                            class="board-menu-item"
+                            id="edit-board-title"
+                        >
+                            Modifier le titre
+                        </button>
+
+                        <form
+                            action="{{ path('app_board_update_dates', {id: board.id}) }}"
+                            method="post"
+                            class="board-dates-form"
+                        >
+                            <p class="board-menu-label">Dates du projet</p>
+
+                            <input
+                                type="hidden"
+                                name="_token"
+                                value="{{ csrf_token('update-dates-' ~ board.id) }}"
+                            >
+
+                            <label for="board-start-date">Date de début</label>
+                            <input
+                                type="date"
+                                id="board-start-date"
+                                name="startDate"
+                                value="{{ board.startDate ? board.startDate|date('Y-m-d') : '' }}"
+                                required
+                            >
+
+                            <label for="board-end-date">Date de fin</label>
+                            <input
+                                type="date"
+                                id="board-end-date"
+                                name="endDate"
+                                value="{{ board.endDate ? board.endDate|date('Y-m-d') : '' }}"
+                                required
+                            >
+
+                            <button type="submit" class="board-menu-item board-menu-save">
+                                Enregistrer les dates
+                            </button>
+                        </form>
+
+                        {% if board.owner == app.user %}
+                            <div class="board-menu-divider"></div>
+
+                            <form
+                                action="{{ path('app_board_delete', {id: board.id}) }}"
+                                method="post"
+                                onsubmit="return confirm('Voulez-vous vraiment supprimer ce projet ? Cette action est définitive.');"
+                            >
+                                <input
+                                    type="hidden"
+                                    name="_token"
+                                    value="{{ csrf_token('delete-board-' ~ board.id) }}"
+                                >
+
+                                <button
+                                    type="submit"
+                                    class="board-menu-item board-menu-delete"
+                                >
+                                    Supprimer le projet
+                                </button>
+                            </form>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+
+            </div>
+        </header>
+
+        {# Colonnes Kanban #}
+        <section class="board-content" aria-label="Tableau Kanban">
+
+            {% if board.boardColumns is empty %}
+
+                <p>Ce tableau n’a pas encore de colonnes.</p>
+
+            {% else %}
+
+                <div
+                    class="board-columns"
+                    id="board-columns"
+                    data-reorder-url="{{ path('app_board_columns_reorder', {id: board.id}) }}"
+                    data-card-move-url-template="{{ path('app_board_card_move', {id: 0}) }}"
+                    data-card-move-token="{{ csrf_token('move-cards-' ~ board.id) }}"
+                    data-token="{{ csrf_token('reorder-columns-' ~ board.id) }}"
+                >
+
+                    {% for column in board.boardColumns %}
+
+                        <section
+                            class="board-column {{ column.isLocked ? 'column-locked-visual' : '' }}"
+                            data-id="{{ column.id }}"
+                            data-locked="{{ column.isLocked ? 'true' : 'false' }}"
+                        >
+
+                        {# En-tête de colonne #}
+                        <header class="board-column-header">
+
+                            <input
+                                type="text"
+                                class="column-title-input"
+                                value="{{ column.name }}"
+                                data-url="{{ path('app_board_column_rename', {id: column.id}) }}"
+                                data-token="{{ csrf_token('rename-column-' ~ column.id) }}"
+                                aria-label="Nom de la colonne"
+                                readonly
+                                {% if column.isLocked %}data-locked="true"{% endif %}
+                            >
+
+                            <div class="column-menu-container">
+                                <button
+                                    type="button"
+                                    class="column-menu {{ column.isLocked ? 'column-menu-locked' : '' }}"
+                                    aria-label="Options de la colonne {{ column.name }}"
+                                >
+                                    ···
+                                </button>
+
+                                <div class="column-menu-dropdown" hidden>
+                                    <button
+                                        type="button"
+                                        class="column-menu-item column-edit-title"
+                                        {% if column.isLocked %}disabled{% endif %}
+                                    >
+                                        Modifier le titre
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        class="column-menu-item column-lock-button"
+                                        data-url="{{ path('app_board_column_toggle_lock', {id: column.id}) }}"
+                                        data-token="{{ csrf_token('lock-column-' ~ column.id) }}"
+                                        aria-pressed="{{ column.isLocked ? 'true' : 'false' }}"
+                                    >
+                                        <span class="column-lock-label">
+                                            {{ column.isLocked ? 'Déverrouiller' : 'Verrouiller' }}
+                                        </span>
+                                    </button>
+
+                                    <form
+                                        action="{{ path('app_board_column_delete', {id: column.id}) }}"
+                                        method="post"
+                                        onsubmit="return confirm('Voulez-vous vraiment supprimer cette colonne ?');"
+                                    >
+                                        <input
+                                            type="hidden"
+                                            name="_token"
+                                            value="{{ csrf_token('delete-column-' ~ column.id) }}"
+                                        >
+
+                                        <button
+                                            type="submit"
+                                            class="column-menu-item column-delete-button"
+                                            {% if column.isLocked %}disabled{% endif %}
+                                        >
+                                            Supprimer
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                        </header>
+
+                            {# Cartes de la colonne #}
+                            <div class="board-column-cards">
+                                {% for card in column.cards|sort((a, b) => a.position <=> b.position) %}
+                                    {% set priority = card.priority|lower %}
+                                    {% if priority not in ['low', 'medium', 'high', 'highest'] %}
+                                        {% set priority = 'low' %}
+                                    {% endif %}
+
+                                    <article class="task-card" data-id="{{ card.id }}" data-priority="{{ priority }}">
+                                        <div class="task-card-title-row">
+                                            <img
+                                                class="task-card-priority"
+                                                src="{{ asset('icons/icon-priority-' ~ priority|capitalize ~ '.png') }}"
+                                                alt=""
+                                                title="{{ priority|capitalize }}"
+                                            >
+
+                                            <div class="task-card-title">{{ card.title }}</div>
+                                        </div>
+
+                                        <button type="button" class="task-card-details" aria-label="Voir les détails">
+                                            <img src="{{ asset('icons/icon-modif.png') }}" alt=""/>
+                                        </button>
+                                    </article>
+                                {% endfor %}
+                            </div>
+
+                            {# Ajouter une carte #}
+                            <button
+                                type="button"
+                                class="add-card"
+                                data-url="{{ path('app_board_card_create', {id: column.id}) }}"
+                                data-priority-low-icon="{{ asset('icons/icon-priority-Low.png') }}"
+                                data-token="{{ csrf_token('create-card-' ~ column.id) }}"
+                                data-edit-icon="{{ asset('icons/icon-modif.png') }}"
+                            >
+                                + Ajouter une tâche
+                            </button>
+
+                        </section>
+
+                    {% endfor %}
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+        {# Navigation entre les vues #}
+        <nav class="board-view-switcher" aria-label="Vues du projet">
+
+            <a href="#kanban" class="board-view active">
+                Kanban
+            </a>
+
+            <a href="#roadmap" class="board-view">
+                Roadmap
+            </a>
+
+            <a href="#progression" class="board-view">
+                Progression
+            </a>
+
+        </nav>
+
+    </main>
+
+
+{# Modale de modification d'une carte #}
+<div id="edit-card-modal" class="edit-card-modal" hidden>
+    <div class="edit-card-backdrop" data-close-edit-modal></div>
+
+    <section
+        class="edit-card-dialog"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="edit-card-heading"
+    >
+        <header class="edit-card-header">
+            <h2 id="edit-card-heading">Modify the task</h2>
+
+            <button
+                type="button"
+                class="edit-card-close"
+                data-close-edit-modal
+                aria-label="Fermer"
+            >
+                &times;
+            </button>
+        </header>
+
+        <form id="edit-card-form">
+            <div class="edit-card-body">
+                <input type="hidden" id="edit-card-id">
+
+                <div class="edit-card-field">
+                    <label for="edit-card-title">Title</label>
+                    <input
+                        type="text"
+                        id="edit-card-title"
+                        name="title"
+                        maxlength="255"
+                        required
+                    >
+                </div>
+
+                <div class="edit-card-field">
+                    <label for="edit-card-description">Description</label>
+                    <textarea
+                        id="edit-card-description"
+                        name="description"
+                        rows="5"
+                    ></textarea>
+                </div>
+
+                <div class="edit-card-fields-row">
+
+                    <div class="edit-card-field">
+                        <label for="edit-card-members">Assigned members</label>
+                        <select
+                            id="edit-card-members"
+                            name="assignedMembers[]"
+                        >
+                            <option value="">Select a member</option>
+                        </select>
+                    </div>
+
+<div class="edit-card-field">
+    <label for="edit-card-priority">Priority</label>
+
+    <div class="priority-select" id="priority-select">
+        <button
+            type="button"
+            class="priority-select-button"
+            aria-haspopup="listbox"
+            aria-expanded="false"
+        >
+            <img class="priority-selected-icon" src="" alt="">
+            <span class="priority-selected-label">Low</span>
+            <span class="priority-select-arrow">⌄</span>
+        </button>
+
+        <div class="priority-select-options" role="listbox" hidden>
+            <button type="button" data-priority="low" role="option">
+                <img src="{{ asset('icons/icon-priority-Low.png') }}" alt="">
+                <span>Low</span>
+            </button>
+
+            <button type="button" data-priority="medium" role="option">
+                <img src="{{ asset('icons/icon-priority-Medium.png') }}" alt="">
+                <span>Medium</span>
+            </button>
+
+            <button type="button" data-priority="high" role="option">
+                <img src="{{ asset('icons/icon-priority-High.png') }}" alt="">
+                <span>High</span>
+            </button>
+
+            <button type="button" data-priority="highest" role="option">
+                <img src="{{ asset('icons/icon-priority-Highest.png') }}" alt="">
+                <span>Highest</span>
+            </button>
+        </div>
+    </div>
+
+    <select id="edit-card-priority" name="priority" hidden>
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+        <option value="highest">Highest</option>
+    </select>
+</div>
+
+                    <div class="edit-card-field">
+                        <label for="edit-card-due-date">Deadline</label>
+                        <input
+                            type="date"
+                            id="edit-card-due-date"
+                            name="dueDate"
+                        >
+                    </div>
+
+                </div>
+
+                <p id="edit-card-error" role="alert" hidden></p>
+            </div>
+
+            <footer class="edit-card-footer">
+                <button type="button" data-close-edit-modal>
+                    Cancel
+                </button>
+
+                <button type="submit" id="edit-card-save">
+                    Save
+                </button>
+            </footer>
+        </form>
+    </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.4/dist/confetti.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+<script src="{{ asset('js/board.js') }}" defer></script>
+
+{% endblock %}
