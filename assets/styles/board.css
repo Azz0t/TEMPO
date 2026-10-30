@@ -1,0 +1,977 @@
+/* ========| PAGE DU BOARD |======== */
+
+/* =| Structure générale |= */
+.board-page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    height: calc(100vh - 40px);
+    margin: 0;
+    padding: 0 8px;
+    box-sizing: border-box;
+    overflow: hidden;
+    background: url("/images/main-back.jpg") center / cover no-repeat;
+    text-align: left;
+}
+
+
+/* ========| BARRE D'OUTILS DU BOARD |======== */
+
+/* =| Structure de la barre |= */
+.board-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+    gap: 20px;
+    width: 100%;
+    height: 40px;
+    margin: 8px 0 0;
+    padding: 10px 10px 10px 8px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    background-color: #FFFFFF75;
+}
+
+.board-toolbar h2 {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+/* =| Titre du board |= */
+.board-title-input {
+    width: 300px;
+    margin: 0;
+    padding: 4px 8px;
+    border: 1px solid transparent;
+    border-radius: 6px;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: 700;
+}
+
+.board-title-input[readonly] {
+    cursor: default;
+}
+
+.board-title-input:not([readonly]) {
+    border-color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.board-title-input:focus-visible {
+    border-color: #d8d8d8;
+}
+
+/* =| Actions de la barre |= */
+.board-toolbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* =| Membres du board |= */
+.board-members {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.board-members img {
+    width: 24px;
+    margin-right: 4px;
+}
+
+/* =| Partage du board |= */
+.board-share {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    padding: 4px 12px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--color-background-btn);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.board-share img {
+    width: 14px;
+}
+
+.board-share p {
+    margin: 0;
+}
+
+/* =| Bouton du menu du board |= */
+.board-toolbar-actions .icon-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--color-background-main);
+}
+
+.board-toolbar-actions .icon-menu img {
+    width: 18px;
+    margin-left: 1px;
+}
+
+
+/* ========| MENU DU BOARD |======== */
+
+/* =| Conteneur du menu |= */
+.board-menu-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+/* =| Liste déroulante |= */
+.board-menu-dropdown {
+    position: absolute;
+    top: 32px;
+    right: 0;
+    z-index: 1000;
+    width: 200px;
+    padding: 6px;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    background-color: var(--color-background-segond);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.board-menu-dropdown[hidden] {
+    display: none;
+}
+
+/* =| Boutons du menu |= */
+.board-menu-item {
+    display: block;
+    width: 100%;
+    padding: 6px 12px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--color-background-main);
+    color: inherit;
+    font: inherit;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+
+.board-menu-item:hover {
+    background-color: var(--color-background-hover);
+}
+
+/* =| Formulaire des dates |= */
+.board-dates-form {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    padding: 8px 6px;
+}
+
+.board-menu-label {
+    margin: 0 0 4px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.board-dates-form label {
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.board-dates-form input[type="date"] {
+    width: 100%;
+    min-width: 0;
+    padding: 6px;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    background-color: var(--color-background-main);
+    color: inherit;
+    font: inherit;
+    font-size: 0.75rem;
+}
+
+.board-menu-save {
+    margin-top: 5px;
+    background-color: var(--color-background-btn);
+    text-align: center;
+}
+
+/* =| Séparation du menu |= */
+.board-menu-divider {
+    height: 1px;
+    margin: 6px 0;
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* =| Suppression du board |= */
+.board-menu-delete {
+    color: #ff7777;
+}
+
+.board-menu-delete:hover {
+    background-color: rgba(255, 80, 80, 0.12);
+}
+
+
+/* ========| ZONE KANBAN |======== */
+
+/* =| Conteneur défilant |= */
+.board-content {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    padding: 0 14px;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+/* =| Liste des colonnes |= */
+.board-columns {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    width: max-content;
+    min-width: 100%;
+    min-height: 100%;
+}
+
+
+/* ========| COLONNES KANBAN |======== */
+
+/* =| Structure d'une colonne |= */
+.board-column {
+    display: flex;
+    flex: 0 0 300px;
+    flex-direction: column;
+    align-self: flex-start;
+    width: 300px;
+    padding: 10px 16px;
+    box-sizing: border-box;
+    border-radius: 16px;
+    background-color: var(--color-background-main);
+    color: #FFFFFF;
+    cursor: grab;
+    transition: box-shadow 0.15s ease;
+}
+
+.board-column:active {
+    cursor: grabbing;
+}
+
+/* =| Curseur des éléments interactifs |= */
+.board-column button,
+.board-column input,
+.board-column a,
+.board-column select,
+.board-column textarea {
+    cursor: auto;
+}
+
+/* =| En-tête de colonne |= */
+.board-column-header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* =| Titre de colonne |= */
+.column-title-input {
+    width: 60%;
+    margin: 0;
+    padding: 3px 5px;
+    border: 1px solid transparent;
+    border-radius: 5px;
+    outline: none;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.column-title-input[readonly] {
+    cursor: default;
+}
+
+.column-title-input:not([readonly]) {
+    border-color: rgba(255, 255, 255, 0.4);
+    background-color: var(--color-background-main);
+}
+
+/* =| Conteneur du menu de colonne |= */
+.column-menu-container {
+    position: relative;
+    display: flex;
+    flex: 0 0 auto;
+    flex-direction: row;
+    align-items: center;
+    background-color: var(--color-background-main);
+}
+
+/* =| Bouton du menu de colonne |= */
+.board-column-header .column-menu {
+    margin: 0 0 0 4px;
+    padding: 4px 6px;
+    border: none;
+    border-radius: 5px;
+    background: transparent;
+    color: #fff;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.board-column-header .column-menu:hover {
+    background-color: var(--color-background-hover);
+}
+
+/* =| Menu déroulant de colonne |= */
+.column-menu-dropdown {
+    position: absolute;
+    top: calc(100% + 8px);
+    right: 0;
+    z-index: 1000;
+    width: 190px;
+    padding: 6px;
+    box-sizing: border-box;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    background-color: var(--color-background-segond);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.column-menu-dropdown[hidden] {
+    display: none;
+}
+
+/* =| Boutons du menu de colonne |= */
+.column-menu-item {
+    display: block;
+    width: 100%;
+    padding: 8px 10px;
+    box-sizing: border-box;
+    border: none;
+    border-radius: 6px;
+    background-color: var(--color-background-main);
+    color: inherit;
+    font: inherit;
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+}
+
+.column-menu-dropdown > .column-menu-item,
+.column-menu-dropdown form .column-menu-item {
+    margin-bottom: 4px;
+}
+
+.column-menu-item:hover {
+    background-color: var(--color-background-hover);
+}
+
+/* =|Bouton Déverrouiller de la colonne Terminé |= */
+.column-lock-permanent {
+    opacity: 0.45 !important;
+    filter: grayscale(1) !important;
+    cursor: not-allowed !important;
+}
+/* =| Conserver l'apparence grisée au survol |= */
+.column-lock-permanent:hover {
+    opacity: 0.45 !important;
+    filter: grayscale(1) !important;
+}
+
+
+/* =| Verrouillage de colonne |= */
+.column-lock-button {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+}
+
+.column-lock-badge {
+    padding: 3px 6px;
+    border-radius: 5px;
+    background-color: var(--color-background-hover);
+    font-size: 0.62rem;
+    font-weight: 400;
+}
+
+/* =| Boutons désactivés |= */
+.column-menu-item:disabled {
+    background-color: #f1f1f1;
+    color: #888;
+    opacity: 0.4;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.column-menu-item:disabled:hover {
+    background-color: #f1f1f1;
+    color: #888;
+}
+
+/* =| Suppression de colonne |= */
+.column-delete-button {
+    color: #ff7777;
+}
+
+.column-delete-button:hover {
+    background-color: rgba(255, 80, 80, 0.12);
+}
+
+
+/* ========| CARTES DE TÂCHES |======== */
+
+/* =| Liste des cartes |= */
+.board-column-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 10px 0 0 0;
+}
+
+/* =| Carte de tâche |= */
+.task-card {
+    padding: 8px 12px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    cursor: grab !important;
+    border-radius: 10px;
+    font-size: 0.8rem;
+    background-color: var(--color-background-third);
+    border: 2px solid var(--color-border-segond);
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+.task-card:active {
+    cursor: grabbing;
+}
+.task-card:hover {
+    border: 2px solid var(--color-border-third);
+}
+
+.task-card-details {
+    display: none;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer !important;
+}
+.task-card-details img {
+    cursor: pointer !important;
+    display: block;
+    width: 12px;
+}
+.task-card:hover .task-card-details,
+.task-card-details:focus-visible {
+    display: block;
+}
+
+.task-card h3 {
+    margin: 0 0 7px;
+    font-size: 0.85rem;
+    font-weight: 400;
+    line-height: 1.3;
+}
+
+.task-card p {
+    margin: 0;
+    color: #D0D0D0;
+    font-size: 0.75rem;
+}
+
+/* =| Icône de description |= */
+.task-card-description-icon {
+    display: block;
+    width: 16px;
+    height: 12px;
+    object-fit: contain;
+    opacity: 0.85;
+}
+
+/* =| Bouton d'ajout de tâche |= */
+.add-card {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 100%;
+    margin-top: 20px;
+    padding: 6px 8px;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--color-text-third);
+    font-size: 0.75rem;
+    text-align: left;
+    cursor: pointer !important;
+}
+.add-card:hover {
+    background-color: var(--color-background-quaternary);
+}
+
+
+/* ========| GLISSER-DÉPOSER DES COLONNES |======== */
+
+/* =| Colonne pendant le déplacement |= */
+.board-column.dragging {
+    outline: none !important;
+    box-shadow: none !important;
+    opacity: 0 !important;
+}
+
+/* =| Aperçu de colonne déplacée |= */
+.column-drag-preview {
+    position: fixed;
+    z-index: 999999;
+    margin: 0;
+    box-sizing: border-box;
+    overflow: visible;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.30);
+    pointer-events: none;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+    filter: none !important;
+    transition: none !important;
+}
+
+
+/* ========| GLISSER-DÉPOSER DES CARTES |======== */
+
+/* Carte fantôme : emplacement de destination */
+.task-card-ghost {
+    opacity: 1 !important;
+    background: var(--color-background-quaternary) !important;
+    border: 2px dotted var(--color-background-third) !important;
+}
+
+/* Carte réellement déplacée */
+.task-card-fallback {
+    opacity: 1 !important;
+    background-color: var(--color-background-third);
+    border: 2px solid var(--color-border-third);
+    filter: none !important;
+    z-index: 99999 !important;
+}
+
+/* Carte sélectionnée */
+.task-card-chosen {
+    opacity: 1 !important;
+}
+
+/* Carte en cours de déplacement */
+.task-card-dragging {
+    opacity: 1 !important;
+}
+
+/* ========| MODALE DE MODIFICATION D'UNE TÂCHE |======== */
+
+
+/* =| Conteneur de la modale |= */
+.edit-card-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.edit-card-modal[hidden] {
+    display: none !important;
+}
+
+/* =| Arrière-plan de la modale |= */
+.edit-card-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(5px);
+}
+
+/* =| Fenêtre principale de la modale |= */
+.edit-card-dialog {
+    position: relative;
+    z-index: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    width: 100%;
+    max-width: 900px;
+    max-height: 80vh;
+    max-height: 80dvh;
+
+    overflow: hidden;
+    border-radius: 14px;
+
+    background: var(--color-background-main);
+    color: var(--color-text-main, inherit);
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+/* =| Formulaire : structure verticale |= */
+#edit-card-form {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+
+    min-height: 0;
+    overflow: hidden;
+
+    color: var(--color-text-main, inherit);
+}
+
+/* =| En-tête fixe |= */
+.edit-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    flex: 0 0 auto;
+    padding: 18px 24px;
+
+    background: var(--color-background-main);
+    border-bottom: 1px solid rgba(128, 128, 128, 0.25);
+}
+
+.edit-card-header h2 {
+    margin: 0;
+    font-size: 1.35rem;
+}
+
+/* =| Bouton de fermeture |= */
+.edit-card-close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 auto;
+    padding: 0 8px;
+
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: inherit;
+
+    font-size: 28px;
+    line-height: 1.2;
+    cursor: pointer;
+}
+
+.edit-card-close:hover {
+    background: var(--color-background-hover);
+}
+
+/* =| Corps du formulaire : seul élément défilant |= */
+.edit-card-body {
+    display: grid;
+    gap: 18px;
+
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 24px;
+    background: var(--color-background-main);
+    color: var(--color-text-main, inherit);
+
+    overscroll-behavior: contain;
+    scrollbar-gutter: stable;
+
+    /* Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: #64748b transparent;
+}
+
+/* =| Barre de défilement : Chrome, Edge et Safari |= */
+.edit-card-body::-webkit-scrollbar {
+    width: 10px;
+}
+
+.edit-card-body::-webkit-scrollbar-track {
+    background: transparent;
+    margin-block: 5px;
+}
+
+.edit-card-body::-webkit-scrollbar-thumb {
+    background: #64748b;
+    border: 3px solid transparent;
+    background-clip: padding-box;
+    border-radius: 999px;
+}
+
+.edit-card-body::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+    background-clip: padding-box;
+}
+
+/* =| Champs du formulaire |= */
+.edit-card-field {
+    display: grid;
+    gap: 7px;
+    min-width: 0;
+}
+
+.edit-card-field label {
+    font-weight: 700;
+    font-size: 0.9rem !important;
+    color: inherit;
+}
+
+.edit-card-field input,
+.edit-card-field textarea,
+.edit-card-field select {
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+
+    font-size: 0.8rem !important;
+    padding: 10px 12px;
+
+    border: 1px solid rgba(128, 128, 128, 0.4);
+    border-radius: 7px;
+
+    background: var(--color-background-main);
+    color: inherit;
+    font: inherit;
+}
+
+.edit-card-field input:focus,
+.edit-card-field textarea:focus,
+.edit-card-field select:focus {
+    outline: 2px solid #64748b;
+    outline-offset: 1px;
+}
+/* =| Aide sous les champs |= */
+.edit-card-field small {
+    color: var(--color-text-muted, #6b7280);
+    font-size: 0.85rem;
+}
+
+/* =| Message d'erreur |= */
+#edit-card-error {
+    margin: 0;
+    color: #b91c1c;
+}
+
+/* =| Pied de page fixe |= */
+.edit-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+
+    flex: 0 0 auto;
+    padding: 18px 24px;
+
+    background: var(--color-background-main);
+    border-top: 1px solid rgba(128, 128, 128, 0.25);
+}
+
+
+/* Ligne des trois champs : toute la largeur de la modale */
+.edit-card-fields-row {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Chaque colonne prend exactement un tiers de la largeur */
+.edit-card-fields-row .edit-card-field {
+    display: grid;
+    grid-template-rows: auto 42px;
+    gap: 7px;
+
+    width: 100%;
+    min-width: 0;
+}
+
+/* Les trois contrôles ont exactement la même taille */
+.edit-card-fields-row input,
+.edit-card-fields-row select {
+    display: block;
+    width: 100% !important;
+    max-width: none;
+    min-width: 0;
+    height: 42px;
+    box-sizing: border-box;
+}
+
+
+
+
+
+.edit-card-field textarea {
+    resize: none;
+}
+
+
+#edit-card-priority[hidden] {
+    display: none !important;
+}/* Masquer le select natif */
+#edit-card-priority {
+    display: none !important;
+}
+
+/* Même dimensions et apparence que les autres champs */
+.priority-select {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+}
+
+.priority-select-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    height: 54px;
+    padding: 0 14px;
+
+    background: transparent;
+    color: inherit;
+
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 9px;
+
+    font: inherit;
+    font-size: 16px;
+    text-align: left;
+
+    cursor: pointer;
+}
+
+.priority-select-button:hover {
+    border-color: rgba(255, 255, 255, 0.4);
+}
+
+.priority-select-button:focus {
+    outline: none;
+    border-color: #7895c5;
+}
+
+.priority-selected-icon {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.priority-selected-label {
+    flex: 1;
+}
+
+.priority-select-arrow {
+    margin-left: auto;
+}
+
+/* Liste déroulante */
+.priority-select-options {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    width: 100%;
+    z-index: 10001;
+
+    padding: 5px;
+
+    background: #29292d;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 9px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.priority-select-options[hidden] {
+    display: none !important;
+}
+
+.priority-select-options button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    padding: 10px;
+
+    color: white;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+
+    text-align: left;
+    cursor: pointer;
+}
+
+.priority-select-options button:hover,
+.priority-select-options button.selected {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.priority-select-options img {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+}
+
+.task-card-title-row {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+}
+
+.task-card-priority {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.task-card-title {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+
+
+
+

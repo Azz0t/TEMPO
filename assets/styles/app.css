@@ -1,0 +1,65 @@
+/* =========================
+   Colors
+   ========================= */
+
+:root {
+    /* Couleurs principales */
+    --color-primary: #6366f1;
+    --color-primary-hover: #4f46e5;
+
+    /* Arrière-plans */
+    --color-background-main: #26262B;
+    --color-background-segond: #1f1c1c;
+    --color-background-third: #3D3D42;
+    --color-background-quaternary: #2d2d30;
+    --color-background-hover: rgb(59, 58, 58);
+    --color-background-btn: #687AD0;
+    --color-surface: #ffffff;
+
+    /* Textes */
+    --color-text-main: #ffffff;
+    --color-text-segond: #A09DAB;
+    --color-text-third: #E5E5E5;
+
+    /* Bordures */
+    --color-border-main: #636363;
+    --color-border-segond: #3D3D42;
+    --color-border-third: #ffffff;
+
+    /* États */
+    --color-success: #16a34a;
+    --color-warning: #f59e0b;
+    --color-danger: #dc2626;
+
+    /* Dimensions */
+    --radius: 8px;
+    --spacing: 16px;
+}
+
+/* =========================
+   2. Styles généraux
+   ========================= */
+
+* {
+    box-sizing: border-box;
+}
+* {
+  font-family: 'Montserrat', sans-serif !important;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: var(--color-background-segond);
+    color: var(--color-text-main);
+}
+
+a {
+    color: var(--color-text-main);
+}
+
+button {
+    cursor: pointer;
+}
+
+
